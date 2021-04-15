@@ -16,7 +16,7 @@
 <meta property="og:description" content="※ 本教程以centos7为例，其他Linux系统可供参考 1.安装JDK(1.8.0)1.查看yum源中是否有相关套件1yum -y list java* 2.通过yum安装JDK1yum install java-1.8.0-openjdk* -y 3.yum删除命令(安装时不需要此步骤)1yum -y remove">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-15T08:36:00.000Z">
-<meta property="article:modified_time" content="2021-04-15T07:18:43.453Z">
+<meta property="article:modified_time" content="2021-04-15T07:21:01.066Z">
 <meta property="article:author" content="天瀑2333">
 <meta property="article:tag" content="开发">
 <meta property="article:tag" content="后端">
@@ -200,7 +200,9 @@
 <p>然后再修改密码</p>
 <h3 id="3-授权远程登陆"><a href="#3-授权远程登陆" class="headerlink" title="(3)授权远程登陆"></a>(3)授权远程登陆</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;远程登录密码&#39; WITH GRANT OPTION;</span><br><span class="line">FLUSH  PRIVILEGES;</span><br></pre></td></tr></table></figure>
 <p>设置完成后重启服务器</p>
-<h2 id="8-其他不常用命令"><a href="#8-其他不常用命令" class="headerlink" title="8.其他不常用命令"></a>8.其他不常用命令</h2><p>‘’’<br>vim /etc/my.cnf //修改mysql配置<br>//my.cnf中加入skip-grant-tables可跳过密码登录mysql<br>rpm -qa | grep ‘mysql’ //查看mysql安装情况<br>‘’’</p>
+<h2 id="8-其他不常用命令"><a href="#8-其他不常用命令" class="headerlink" title="8.其他不常用命令"></a>8.其他不常用命令</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vim &#x2F;etc&#x2F;my.cnf &#x2F;&#x2F;修改mysql配置</span><br><span class="line">&#x2F;&#x2F;my.cnf中加入skip-grant-tables可跳过密码登录mysql</span><br><span class="line">rpm -qa | grep &#39;mysql&#39; &#x2F;&#x2F;查看mysql安装情况</span><br></pre></td></tr></table></figure>
+
+
 <h1 id="3-防火墙设置"><a href="#3-防火墙设置" class="headerlink" title="3.防火墙设置"></a>3.防火墙设置</h1><h2 id="3-1防火墙状态"><a href="#3-1防火墙状态" class="headerlink" title="3.1防火墙状态"></a>3.1防火墙状态</h2><p>查看防火墙状态 systemctl status firewalld<br>开启防火墙 systemctl start firewalld<br>关闭防火墙 systemctl stop firewalld</p>
 <p>若遇到无法开启<br>先用：systemctl unmask firewalld.service<br>然后：systemctl start firewalld.service</p>
 <h2 id="3-2端口状态"><a href="#3-2端口状态" class="headerlink" title="3.2端口状态"></a>3.2端口状态</h2><p>查询已开放的端口 netstat -ntulp | grep 端口号：可以具体查看某一个端口号<br>查询指定端口是否已开 firewall-cmd –query-port=666/tcp<br>提示 yes，表示开启；no表示未开启。<br>查看想开的端口是否已开：firewall-cmd –query-port=6379/tcp<br>添加指定需要开放的端口：firewall-cmd –add-port=123/tcp –permanent<br>重载入添加的端口：firewall-cmd –reload<br>查询指定端口是否开启成功：firewall-cmd –query-port=123/tcp<br>移除指定端口：firewall-cmd –permanent –remove-port=123/tcp</p>
