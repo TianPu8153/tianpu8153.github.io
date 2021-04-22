@@ -16,7 +16,7 @@
 <meta property="og:description" content="※ 本教程以centos7为例，其他Linux系统可供参考 1.安装JDK(1.8.0)1.查看yum源中是否有相关套件1yum -y list java* 2.通过yum安装JDK1yum install java-1.8.0-openjdk* -y 3.yum删除命令(安装时不需要此步骤)1yum -y remove">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-15T08:36:00.000Z">
-<meta property="article:modified_time" content="2021-04-15T07:21:01.066Z">
+<meta property="article:modified_time" content="2021-04-22T05:01:36.348Z">
 <meta property="article:author" content="天瀑2333">
 <meta property="article:tag" content="开发">
 <meta property="article:tag" content="后端">
@@ -206,7 +206,15 @@
 <h1 id="3-防火墙设置"><a href="#3-防火墙设置" class="headerlink" title="3.防火墙设置"></a>3.防火墙设置</h1><h2 id="3-1防火墙状态"><a href="#3-1防火墙状态" class="headerlink" title="3.1防火墙状态"></a>3.1防火墙状态</h2><p>查看防火墙状态 systemctl status firewalld<br>开启防火墙 systemctl start firewalld<br>关闭防火墙 systemctl stop firewalld</p>
 <p>若遇到无法开启<br>先用：systemctl unmask firewalld.service<br>然后：systemctl start firewalld.service</p>
 <h2 id="3-2端口状态"><a href="#3-2端口状态" class="headerlink" title="3.2端口状态"></a>3.2端口状态</h2><p>查询已开放的端口 netstat -ntulp | grep 端口号：可以具体查看某一个端口号<br>查询指定端口是否已开 firewall-cmd –query-port=666/tcp<br>提示 yes，表示开启；no表示未开启。<br>查看想开的端口是否已开：firewall-cmd –query-port=6379/tcp<br>添加指定需要开放的端口：firewall-cmd –add-port=123/tcp –permanent<br>重载入添加的端口：firewall-cmd –reload<br>查询指定端口是否开启成功：firewall-cmd –query-port=123/tcp<br>移除指定端口：firewall-cmd –permanent –remove-port=123/tcp</p>
-<h1 id="4-搭建SSR"><a href="#4-搭建SSR" class="headerlink" title="4.搭建SSR"></a>4.搭建SSR</h1>
+<h1 id="4-搭建SSR"><a href="#4-搭建SSR" class="headerlink" title="4.搭建SSR"></a>4.搭建SSR</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">yum -y install wget</span><br><span class="line">wget -N --no-check-certificate https:&#x2F;&#x2F;softs.fun&#x2F;Bash&#x2F;ssr.sh &amp;&amp; chmod +x ssr.sh &amp;&amp; bash ssr.sh</span><br></pre></td></tr></table></figure>
+<p>备用地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum -y install wget</span><br><span class="line">wget -N --no-check-certificate https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;ToyoDAdoubi&#x2F;doubi&#x2F;master&#x2F;ssr.sh &amp;&amp; chmod +x</span><br></pre></td></tr></table></figure>
+
+<p>加密方式-CR4(据说不容易被封)</p>
+<p>协议插件-origin</p>
+<p>混淆插件-plain</p>
+<p>BBR加速</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https:&#x2F;&#x2F;github.com&#x2F;teddysun&#x2F;across&#x2F;raw&#x2F;master&#x2F;bbr.sh</span><br><span class="line">chmod +x bbr.sh</span><br><span class="line">.&#x2F;bbr.sh</span><br></pre></td></tr></table></figure>
       
 
       
