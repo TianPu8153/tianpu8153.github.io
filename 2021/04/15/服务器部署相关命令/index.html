@@ -16,7 +16,7 @@
 <meta property="og:description" content="※ 本教程以centos7为例，其他Linux系统可供参考 1.安装JDK(1.8.0)1.查看yum源中是否有相关套件1yum -y list java* 2.通过yum安装JDK1yum install java-1.8.0-openjdk* -y 3.yum删除命令(安装时不需要此步骤)1yum -y remove">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-04-15T08:36:00.000Z">
-<meta property="article:modified_time" content="2021-04-22T05:01:36.348Z">
+<meta property="article:modified_time" content="2021-04-22T09:36:19.343Z">
 <meta property="article:author" content="天瀑2333">
 <meta property="article:tag" content="开发">
 <meta property="article:tag" content="后端">
@@ -213,8 +213,29 @@
 <p>加密方式-CR4(据说不容易被封)</p>
 <p>协议插件-origin</p>
 <p>混淆插件-plain</p>
-<p>BBR加速</p>
+<p>BBR加速<br>如果是centos7，首先更换内核<br>参考教程 原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/KnYoboy/article/details/84133714">https://blog.csdn.net/KnYoboy/article/details/84133714</a><br>导入公钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm --import https:&#x2F;&#x2F;www.elrepo.org&#x2F;RPM-GPG-KEY-elrepo.org</span><br></pre></td></tr></table></figure>
+<p>要为RHEL-安装ELRepo 7，SL- 7或CentOS- 7：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rpm -Uvh https:&#x2F;&#x2F;www.elrepo.org&#x2F;elrepo-release-7.0-3.el7.elrepo.noarch.rpm</span><br></pre></td></tr></table></figure>
+
+<p>安装新的内核（2020.02.02：内核版本4.19.2-1）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum --enablerepo&#x3D;elrepo-kernel install kernel-ml</span><br></pre></td></tr></table></figure>
+<p>查看已经安装的内核</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk -F\&#39; &#39;$1&#x3D;&#x3D;&quot;menuentry &quot; &#123;print i++ &quot; : &quot; $2&#125;&#39; &#x2F;etc&#x2F;grub2.cfg</span><br></pre></td></tr></table></figure>
+<p>输出内容参考：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@kail local]# awk -F\&#39; &#39;$1&#x3D;&#x3D;&quot;menuentry &quot; &#123;print i++ &quot; : &quot; $2&#125;&#39; &#x2F;etc&#x2F;grub2.cfg</span><br><span class="line">0 : CentOS Linux 7 Rescue 985434a77e58b3c517a6979f4a03f33e (4.19.2-1.el7.elrepo.x86_64)</span><br><span class="line">1 : CentOS Linux (4.19.2-1.el7.elrepo.x86_64) 7 (Core)</span><br><span class="line">2 : CentOS Linux (4.10.4-1.el7.elrepo.x86_64) 7 (Core)</span><br><span class="line">3 : CentOS Linux (3.10.0-514.el7.x86_64) 7 (Core)</span><br><span class="line">4 : CentOS Linux (0-rescue-bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb) 7 (Core)</span><br></pre></td></tr></table></figure>
+<p>把新内核（4.16.2-1.el7.elrepo.x86_64）设置为默认</p>
+<p>grub2-set-default 0<br>然后重启（reboot），查看内核版本。</p>
+<p>uname-r<br>输出是最新的版本就OK了。</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">wget --no-check-certificate https:&#x2F;&#x2F;github.com&#x2F;teddysun&#x2F;across&#x2F;raw&#x2F;master&#x2F;bbr.sh</span><br><span class="line">chmod +x bbr.sh</span><br><span class="line">.&#x2F;bbr.sh</span><br></pre></td></tr></table></figure>
+
+<p>编辑/etc/sysctl.conf</p>
+<p>添加以下内容↓↓↓↓↓</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">net.core.default_qdisc &#x3D; fq</span><br><span class="line">net.ipv4.tcp_congestion_control &#x3D; bbr</span><br></pre></td></tr></table></figure>
+<p>保存  退出  ，然后应用设置  ↓↓↓↓↓↓↓↓↓↓</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">  sysctl -p</span><br></pre></td></tr></table></figure>
+<p>检测是否开启BBR</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsmod | grep bbr</span><br></pre></td></tr></table></figure>
       
 
       
